@@ -1,0 +1,78 @@
+body {
+	background: #F0F0F0;
+	font-family: Arial;
+	text-align: center;
+}
+h1 {
+	color: #666;
+	font-size: 30px;
+	margin-top: 30px;
+	padding-bottom: 20px;
+}
+#board {
+	width: 800px;
+	background: #FFF;
+	margin: 0 auto;
+	cursor: pointer;
+	padding: 17px 15px;
+	border: 1px solid #BBB;
+	box-shadow: 0px 0px 50px 10px rgba(0,0,0,0.15);
+}
+#board table {
+	width: 100%;
+}
+#board table tr td {
+	position: relative;
+}
+#board table tr td .line {
+	z-index: 10;
+	position: absolute;
+}
+#board table tr td .line.hover {
+	background: #AAA;
+}
+#board table tr td .line.player-1 { background: #990000 !important; }
+#board table tr td .line.player-2 { background: #CC0000 !important; }
+
+#board table tr td .line.top-line { top: -3px; left: 0; right: 0; }
+#board table tr td .line.bottom-line { bottom: -3px; left: 0; right: 0; }
+#board table tr td .line.left-line { left: -3px; top: 0; bottom: 0; }
+#board table tr td .line.right-line { right: -3px; top: 0; bottom: 0; }
+#board table tr td .line.top-line,
+#board table tr td .line.bottom-line {
+	height: 5px;
+}
+#board table tr td .line.left-line,
+#board table tr td .line.right-line {
+	width: 5px;
+}
+
+#board table tr td .dot {
+	z-index: 11;
+	background: #AAA;
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+}
+#board table tr td .dot.dot-top-left { top: -5px; left: -5px; }
+#board table tr td .dot.dot-top-right { top: -5px; right: -5px; }
+#board table tr td .dot.dot-bottom-left { bottom: -5px; left: -5px; }
+#board table tr td .dot.dot-bottom-right { bottom: -5px; right: -5px; }
+
+.square {
+	position: relative;
+}
+.square:before {
+	display: block;
+	content: "";
+	width: 100%;
+	padding-top: 100%;
+}
+.square > .square-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
