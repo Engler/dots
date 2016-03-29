@@ -1,12 +1,22 @@
 <html>
 	<head>
-		<title>The DOT Game!</title>
+		<title>Jogo dos pontos</title>
 		<script type="text/javascript" src="assets/js/jquery-2.2.1.min.js"></script>
 		<script type="text/javascript" src="assets/js/main.js"></script>
 		<link href="assets/css/main.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
-		<h1>Connect The Dots!</h1>
+		<div id="header">
+			<h1>Jogo dos pontos</h1>
+			<div class="score left">
+				<div class="name">Voce</div>
+				<div class="points">0</div>
+			</div>
+			<div class="score right">
+				<div class="name">Adversario</div>
+				<div class="points">0</div>
+			</div>
+		</div>
 		<div id="board">
 			<table cellpadding="0" cellspacing="0">
 				<?php

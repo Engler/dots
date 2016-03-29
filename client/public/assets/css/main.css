@@ -1,16 +1,39 @@
 body {
 	background: #F0F0F0;
+	color: #666;
 	font-family: Arial;
 	text-align: center;
 }
-h1 {
+#header {
+	position: relative;
+	padding: 0 50px;
+	width: 700px;
+	margin: 30px auto;
+}
+#header h1 {
 	color: #666;
 	font-size: 30px;
-	margin-top: 30px;
-	padding-bottom: 20px;
+	margin: 0;
+}
+#header .score {
+	position: absolute;
+	top: 0;
+}
+#header .score.left {
+	left: 0;
+}
+#header .score.right {
+	right: 0;
+}
+#header .score .name {
+	font-weight: bold;
+}
+#header .score .points {
+	font-size: 25px;
 }
 #board {
 	width: 800px;
+	position: relative;
 	background: #FFF;
 	margin: 0 auto;
 	cursor: pointer;
