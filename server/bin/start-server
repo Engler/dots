@@ -1,0 +1,9 @@
+<?php
+
+include '../vendor/autoload.php';
+
+use Ratchet\Server\IoServer;
+use App\GameServer;
+
+$server = IoServer::factory(new GameServer(), 8080);
+$server->run();
