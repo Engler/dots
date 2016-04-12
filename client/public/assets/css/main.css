@@ -54,8 +54,7 @@ body {
 #board table tr td .line.hover {
 	background: #AAA;
 }
-#board table tr td .line.player-1 { background: #990000 !important; }
-#board table tr td .line.player-2 { background: #CC0000 !important; }
+#board table tr td .line.filled { background: #666 !important; }
 
 #board table tr td .line.top-line { top: -3px; left: 0; right: 0; }
 #board table tr td .line.bottom-line { bottom: -3px; left: 0; right: 0; }

@@ -4,7 +4,7 @@ $(document).ready(function() {
 	SQUARE_SIZE = $('#board .square').eq(0).width();
 
 	$('#board').click(function() {
-		$('.line.hover').removeClass('hover').addClass('player-1');
+		$('.line.hover').removeClass('hover').addClass('filled');
 	});
 
 	$('#board .square').mousemove(function(event) {
@@ -48,3 +48,47 @@ function pointInTriangle(point, v1, v2, v3) {
 function signTriangle(p1, p2, p3) {
 	return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);   
 }
+
+var Server = new function() {
+    this.socket = null;
+    
+    var $this = this;
+    
+    this.initialize = function() {
+        
+        if ($this.isConnected()) {
+            return false;
+        }
+        
+        this.socket = new WebSocket("ws://localhost:8080/");
+        
+        this.socket.onopen = function() {
+            console.log('socket opened');
+        };
+        
+        this.socket.onclose = function(event) {
+            console.log('socket closed');
+        };
+        this.socket.onerror = function (error) {
+            console.log(error);
+        };
+        this.socket.onmessage = function(event) {
+            var messageData = JSON.parse(event.data);
+            console.log(messageData);
+        };
+        
+        return true;
+    };
+    
+    this.isConnected = function() {
+        return (this.socket != null && this.socket.readyState == 1);
+    };
+    
+    this.close = function() {
+        this.socket.close();
+    }
+    
+    this.send = function(type, params) {
+        this.socket.send(JSON.stringify({'type':type, 'params':params}));
+    };
+}; 
