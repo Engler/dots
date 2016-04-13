@@ -8,6 +8,36 @@ use Ratchet\WebSocket\WsServer;
 
 use App\GameServer;
 
+
+
+
+
+
+
+
+use App\GameSession;
+$session = new GameSession([
+	'type'   => GameSession::BOT_VS_BOT,
+	'width'  => 5,
+	'height' => 5
+]);
+
+$board = $session->getBoard();
+
+for ($i = 1; $i <= 100; $i++) {
+	$session->proceed();
+	echo "------------ JOGADA " . $i . "------------\n";
+	echo $board . "\n";
+}
+
+exit;
+
+
+
+
+
+
+
 $server = IoServer::factory(
     new HttpServer(
         new WsServer(

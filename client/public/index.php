@@ -17,11 +17,12 @@
 				<div class="points">0</div>
 			</div>
 		</div>
-		<div id="board">
+		<div id="board" style="width: 500px;">
+			<div class="loading-screen"></div>
 			<table cellpadding="0" cellspacing="0">
 				<?php
-					$rows = 8;
-					$columns = 15;
+					$rows = 5;
+					$columns = 8;
 
 					for ($row = 1; $row <= $rows; $row++) {
 						echo '<tr>';
@@ -37,7 +38,7 @@
 									<div class="line right-line"></div>
 									<div class="line bottom-line"></div>
 
-								  	<div id="square-'.$row.'-'.$column.'" data-row="'.$row.'" data-column="'.$column.'" class="square">
+								  	<div id="square-'.$column.'-'.$row.'" data-row="'.$row.'" data-column="'.$column.'" class="square">
 								  		<div class="square-content">
 								  		</div>
 								  	</div>

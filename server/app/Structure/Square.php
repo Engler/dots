@@ -8,7 +8,7 @@ class Square
 	const BOTTOM = 2;
 	const LEFT   = 3;
 
-	private $edgeValues = [1, 2, 4, 8];
+	private static $edgeValues = [1, 2, 4, 8];
 
 	protected $x;
 	protected $y;
@@ -30,24 +30,44 @@ class Square
 		return $this->edges[$edge];
 	}
 
-	public function fillEdge($edge)
+	public function fillEdge($player, $edge)
 	{
 		if (!$this->isEdgeFilled($edge)) {
 			$this->edges[$edge] = true;
-			$this->value += $this->getEdgeValue($edge);
+			$this->value += self::getEdgeValue($edge);
+
+			if ($this->finished()) {
+				$this->owner = $player;
+			}
+
 			return true;
 		}
 		return false;
 	}
 
-	public function getEdgeValue($edge)
+	public static function getEdgeValue($edge)
 	{
-		return $this->edgeValues[$edge];
+		return self::$edgeValues[$edge];
+	}
+
+	public static function getOppositeEdge($edge)
+	{	
+		switch ($edge) {
+			case self::TOP: return self::BOTTOM;
+			case self::BOTTOM: return self::TOP;
+			case self::LEFT: return self::RIGHT;
+			case self::RIGHT: return self::LEFT;
+		}
+	}
+
+	public function setOwner($owner)
+	{
+		$this->owner = $owner;
 	}
 
 	public function finished()
 	{
-		return $this->owner !== null;
+		return $this->value === 15;
 	}
 
 	public function aboutToFinish()

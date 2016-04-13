@@ -1,7 +1,7 @@
 <?php
 namespace App\Player;
 
-class HumanPlayer
+class BotPlayer extends Player
 {
 	public function __construct()
 	{

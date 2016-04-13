@@ -31,7 +31,18 @@ class GameServer implements MessageComponentInterface
     public function onMessage(ConnectionInterface $connection, $message)
     {
     	print_r($message);
+
+
     	/*
+
+
+		Se nao exister uma sessao
+			Cria a sessao do jogo
+		Senao
+			Se eh uma mensagem de jogada, e realmente eh a vez desse jogador
+*/				
+
+
     	if (!isset($connection->sessionId)) {
 	    	$session = new GameSession([
 	    		'type'   => GameSession::HUMAN_VS_BOT,
@@ -44,7 +55,6 @@ class GameServer implements MessageComponentInterface
 
 			echo "Initialized session " . $session->getId() . "\n";
     	}
-    	*/
     }
 
     public function onClose(ConnectionInterface $connection)

@@ -30,6 +30,46 @@ class Board
 		return $this->squares[$x][$y];
 	}
 
+	public function fill($player, $x, $y, $edge)
+	{
+		$square = $this->getSquare($x, $y);
+		if ($square) {
+			$move = $square->fillEdge($player, $edge);
+			if ($move) {
+				$neighborSquare = null;
+				switch ($edge) {
+					case Square::TOP:
+						$neighborSquare = $this->getSquare($x, $y - 1);
+						break;
+					case Square::BOTTOM:
+						$neighborSquare = $this->getSquare($x, $y + 1);
+						break;
+					case Square::LEFT:
+						$neighborSquare = $this->getSquare($x - 1, $y);
+						break;
+					case Square::RIGHT:
+						$neighborSquare = $this->getSquare($x + 1, $y);
+						break;
+				}
+				if ($neighborSquare) {
+					$move = $neighborSquare->fillEdge($player, Square::getOppositeEdge($edge));
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function getWidth()
+	{
+		return $this->width;
+	}
+
+	public function getHeight()
+	{
+		return $this->height;
+	}
+
 	public function __toString()
 	{
 		$string = '';
