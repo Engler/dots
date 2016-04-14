@@ -18,7 +18,7 @@ class GameSession
 
 	public function __construct($params)
 	{
-        $this->id = strtoupper(uniqid());
+        $this->id = strtoupper(uniqid('SESS-'));
         $this->board = new Board($params['width'], $params['height']);
         $this->type = $params['type'];
         $this->turn = 0;

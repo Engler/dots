@@ -1,6 +1,8 @@
 var SQUARE_SIZE = 0;
 $(document).ready(function() {
 
+	Server.initialize();
+
 	SQUARE_SIZE = $('#board .square').eq(0).width();
 
 	$('#board').click(function() {
@@ -25,12 +27,12 @@ $(document).ready(function() {
 
 				$(this).addClass('loading');
 
-				var $this = $(this);
-				setTimeout(function() {
-					Board.fillEdge(x, y, edge);
-					$this.removeClass('loading');
-					line.removeClass('hover');
-				}, 200);
+				Server.send(1001, {'x' : x, 'y' : y, 'edge' : edge});
+
+				$(this).removeClass('loading');
+				line.removeClass('hover');
+
+				//Board.fillEdge(x, y, edge);
 			}
 		}
 
@@ -140,6 +142,7 @@ var Server = new function() {
         
         this.socket.onopen = function() {
             console.log('socket opened');
+            $this.send(1000);
         };
         
         this.socket.onclose = function(event) {
@@ -150,7 +153,9 @@ var Server = new function() {
         };
         this.socket.onmessage = function(event) {
             var messageData = JSON.parse(event.data);
-            console.log(messageData);
+            if (messageData.type == 2000) {
+            	$this.receivePlayerMove(messageData.params);
+            }
         };
         
         return true;
@@ -163,8 +168,13 @@ var Server = new function() {
     this.close = function() {
         this.socket.close();
     }
-    
+
     this.send = function(type, params) {
+    	params = params || null;
         this.socket.send(JSON.stringify({'type':type, 'params':params}));
+    };
+
+    this.receivePlayerMove = function(params) {
+    	Board.fillEdge(params.x, params.y, params.edge);
     };
 }; 
