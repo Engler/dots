@@ -9,11 +9,12 @@ class Message
 
 	const SEND_PLAYER_MOVE			= 2000;
 	const SEND_PONG					= 2001;
+	const SEND_PLAYER_TURN			= 2002;
 
 	private $type;
 	private $params;
 
-	public function __construct($type, $params)
+	public function __construct($type, $params= [])
 	{
 		$this->type = $type;
 		$this->params = $params;

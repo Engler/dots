@@ -82,6 +82,11 @@ class GameServer implements MessageComponentInterface
     	$this->sessions[$session->getId()] = $session;
 		$connection->sessionId = $session->getId();
 
+		$message = new Message(
+    		Message::SEND_PLAYER_TURN
+		);
+    	$connection->send((string) $message);
+
 		Logger::message('Initialized session ' .  $session->getId());
     }
 

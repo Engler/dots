@@ -28,8 +28,6 @@ $(document).ready(function() {
 				$(this).addClass('loading');
 
 				Server.send(1001, {'x' : x, 'y' : y, 'edge' : edge});
-
-				$(this).removeClass('loading');
 				line.removeClass('hover');
 
 				//Board.fillEdge(x, y, edge);
@@ -155,6 +153,8 @@ var Server = new function() {
             var messageData = JSON.parse(event.data);
             if (messageData.type == 2000) {
             	$this.receivePlayerMove(messageData.params);
+            } else if (messageData.type == 2002) {
+				$this.receivePlayerTurn();
             }
         };
         
@@ -177,4 +177,8 @@ var Server = new function() {
     this.receivePlayerMove = function(params) {
     	Board.fillEdge(params.x, params.y, params.edge);
     };
+
+    this.receivePlayerTurn = function() {
+    	$('#board').removeClass('loading');
+    }
 }; 

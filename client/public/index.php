@@ -17,7 +17,7 @@
 				<div class="points">0</div>
 			</div>
 		</div>
-		<div id="board" style="width: 500px;">
+		<div id="board" class="loading" style="width: 500px;">
 			<div class="loading-screen"></div>
 			<table cellpadding="0" cellspacing="0">
 				<?php
