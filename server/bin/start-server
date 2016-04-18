@@ -8,12 +8,16 @@ use Ratchet\WebSocket\WsServer;
 
 use App\GameServer;
 
-
-
-
-
-
 /*
+use App\Event\EventManager;
+EventManager::on('socket.connect', function($event) {
+	echo $event->getTime();
+	echo "socket.connect function called.\n";
+});
+EventManager::fire('socket.connect');
+exit;
+
+
 
 use App\GameSession;
 $session = new GameSession([

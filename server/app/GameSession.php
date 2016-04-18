@@ -2,58 +2,92 @@
 namespace App;
 
 use App\Structure\Board;
+use App\Event\EventManager;
 use App\Player\HumanPlayer;
 use App\Player\BotPlayer;
 
 class GameSession
 {
-    const HUMAN_VS_BOT   = 1;
-    const BOT_VS_BOT     = 2;
-
     protected $id;
     protected $board;
     protected $type;
-    protected $players;
+
+    protected $humanPlayer;
+    protected $botPlayer;
+
     protected $turn;
 
 	public function __construct($params)
 	{
         $this->id = strtoupper(uniqid('SESS-'));
         $this->board = new Board($params['width'], $params['height']);
-        $this->type = $params['type'];
-        $this->turn = 0;
+        $this->board->setSession($this);
 
-        switch ($this->type) {
-            case self::HUMAN_VS_BOT:
-                $this->players = [new HumanPlayer(), new BotPlayer()];
-                break;
-            case self::BOT_VS_BOT:
-                $this->players = [new BotPlayer(), new BotPlayer()];
-                break;
-        }
+        $this->humanTurn = null;
+
+        $this->humanPlayer = new HumanPlayer();
+        $this->humanPlayer->setSession($this);
+        $this->humanPlayer->setConnection($params['humanPlayerConnection']);
+
+        $this->botPlayer = new BotPlayer();
+        $this->botPlayer->setSession($this);
 	}
 
-    public function proceed()
+    public function changeTurn($keepPlayer = false)
     {
-        $this->turn = (int) !$this->turn;
+        if (!$keepPlayer) {
+            if ($this->humanTurn == null) {
+                $this->humanTurn = true;
+            } else {
+                $this->humanTurn = !$this->humanTurn;
+            }
+        }
 
-        $player = $this->getActualPlayer();
+        EventManager::fire('game.turnChanged', [
+            'session' => $this,
+            'humanTurn' => $this->humanTurn
+        ]);
 
-        do {
-            $x = mt_rand(1, $this->board->getWidth());
-            $y = mt_rand(1, $this->board->getHeight());
-            $edge = mt_rand(0, 3);
-        } while (!$this->board->fill($player, $x, $y, $edge));
+        if (!$this->humanTurn) {
+
+            $squaresFilled = 0;
+            $square = $this->board->getSquareAboutToFinish();
+
+            if ($square) {
+                $x = $square->getX();
+                $y = $square->getY();
+                $edge = $square->getRemainingEdge();
+                $this->board->fill($this->botPlayer, $x, $y, $edge, $squaresFilled);
+            }
+            
+            if ($squaresFilled == 0) {
+                $this->changeTurn();
+            } else {
+                $this->changeTurn(true);
+            }
+        }
     }
 
-    public function getActualPlayer()
+    public function receivePlayerMove($x, $y, $edge)
     {
-        return $this->players[$this->turn];
+        $squaresFilled = 0;
+        if ($this->board->fill($this->humanPlayer, $x, $y, $edge, $squaresFilled)) {
+            if ($squaresFilled == 0) {
+                $this->changeTurn();
+            }
+        }
+
+        $this->changeTurn(true);
     }
 
     public function getBoard()
     {
         return $this->board;
+    }
+
+    public function getHumanPlayer()
+    {
+        return $this->humanPlayer;
     }
 
     public function getId()

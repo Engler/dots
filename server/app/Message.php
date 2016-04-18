@@ -10,7 +10,8 @@ class Message
 	const SEND_PLAYER_MOVE			= 2000;
 	const SEND_PONG					= 2001;
 	const SEND_PLAYER_TURN			= 2002;
-
+	const SEND_SQUARE_FINISHED		= 2003;
+	
 	private $type;
 	private $params;
 

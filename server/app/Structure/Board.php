@@ -5,6 +5,8 @@ use App\Structure\Square;
 
 class Board
 {
+	use \App\ContainsGameSessionTrait;
+
 	protected $width;
 	protected $height;
 	protected $squares;
@@ -30,12 +32,17 @@ class Board
 		return $this->squares[$x][$y];
 	}
 
-	public function fill($player, $x, $y, $edge)
+	public function fill($player, $x, $y, $edge, &$squaresFilled)
 	{
+		$squaresFilled = 0;
+
 		$square = $this->getSquare($x, $y);
 		if ($square) {
 			$move = $square->fillEdge($player, $edge);
 			if ($move) {
+				if ($square->finished()) {
+					$squaresFilled++;
+				}
 				$neighborSquare = null;
 				switch ($edge) {
 					case Square::TOP:
@@ -53,11 +60,26 @@ class Board
 				}
 				if ($neighborSquare) {
 					$move = $neighborSquare->fillEdge($player, Square::getOppositeEdge($edge));
+					if ($move && $neighborSquare->finished()) {
+						$squaresFilled++;
+					}
 				}
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public function getSquareAboutToFinish()
+	{
+		for ($y = 1; $y <= $this->height; $y++) {
+			for ($x = 1; $x <= $this->width; $x++) {
+				if ($this->squares[$x][$y]->aboutToFinish()) {
+					return $this->squares[$x][$y];
+				}
+			}
+		}
+		return null;
 	}
 
 	public function getWidth()

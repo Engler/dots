@@ -140,7 +140,12 @@ var Server = new function() {
         
         this.socket.onopen = function() {
             console.log('socket opened');
-            $this.send(1000);
+            $this.send(1000, {'width' : BOARD_WIDTH, 'height' : BOARD_HEIGHT});
+
+            // Ping
+            setInterval(function() {
+            	$this.send(1002);
+            }, 15000);
         };
         
         this.socket.onclose = function(event) {
@@ -155,6 +160,8 @@ var Server = new function() {
             	$this.receivePlayerMove(messageData.params);
             } else if (messageData.type == 2002) {
 				$this.receivePlayerTurn();
+            } else if (messageData.type == 2003) {
+            	$this.receiveSquareFinished(messageData.params);
             }
         };
         
@@ -170,8 +177,10 @@ var Server = new function() {
     }
 
     this.send = function(type, params) {
-    	params = params || null;
-        this.socket.send(JSON.stringify({'type':type, 'params':params}));
+    	if ($this.isConnected()) {
+	    	params = params || null;
+	        this.socket.send(JSON.stringify({'type':type, 'params':params}));
+    	}
     };
 
     this.receivePlayerMove = function(params) {
@@ -180,5 +189,19 @@ var Server = new function() {
 
     this.receivePlayerTurn = function() {
     	$('#board').removeClass('loading');
-    }
+    };
+
+    this.receiveSquareFinished = function(params) {
+		var pointsElement = null;
+    	if (params.human) {
+    		pointsElement = $('#human-points');
+    	} else {
+    		pointsElement = $('#bot-points');
+    	}
+
+    	var actualPoints = parseInt(pointsElement.text());
+    	pointsElement.text(actualPoints + 1);
+
+    	$('#square-' + params.x + '-' + params.y).addClass(params.human ? 'human-player' : 'bot-player');
+    };
 }; 

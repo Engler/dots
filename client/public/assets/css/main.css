@@ -103,6 +103,12 @@ body {
 .square {
 	position: relative;
 }
+.square.human-player {
+	background: #DCF361;
+}
+.square.bot-player {
+	background: #A0D1FB;
+}
 .square:before {
 	display: block;
 	content: "";

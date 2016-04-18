@@ -1,6 +1,8 @@
 <?php
 namespace App\Structure;
 
+use App\Event\EventManager;
+
 class Square
 {
 	const TOP    = 0;
@@ -35,9 +37,20 @@ class Square
 		if (!$this->isEdgeFilled($edge)) {
 			$this->edges[$edge] = true;
 			$this->value += self::getEdgeValue($edge);
+			EventManager::fire('game.squareFillEdge', [
+				'session' => $player->getSession(),
+				'square' => $this,
+				'player' => $player,
+				'edge' => $edge
+			]);
 
 			if ($this->finished()) {
 				$this->owner = $player;
+				EventManager::fire('game.squareFinished', [
+					'session' => $player->getSession(),
+					'square' => $this,
+					'player' => $player
+				]);
 			}
 
 			return true;
@@ -73,6 +86,36 @@ class Square
 	public function aboutToFinish()
 	{
 		return in_array($this->value, [7, 11, 13, 14]);
+	}
+
+	public function getRemainingEdge()
+	{
+		switch ($this->value) {
+			case 7:
+				return self::LEFT;
+				break;
+			case 11:
+				return self::BOTTOM;
+				break;
+			case 13:
+				return self::RIGHT;
+				break;
+			case 14:
+				return self::TOP;
+				break;
+		}
+
+		return null;
+	}
+
+	public function getX()
+	{
+		return $this->x;		
+	}
+
+	public function getY()
+	{
+		return $this->y;
 	}
 
 	public function __toString()

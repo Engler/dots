@@ -7,4 +7,9 @@ class BotPlayer extends Player
 	{
 		parent::__construct();
 	}
+
+	public function isHuman()
+	{
+		return false;
+	}
 }
