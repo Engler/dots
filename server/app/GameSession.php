@@ -58,6 +58,12 @@ class GameSession
                 $y = $square->getY();
                 $edge = $square->getRemainingEdge();
                 $this->board->fill($this->botPlayer, $x, $y, $edge, $squaresFilled);
+            } else {
+                do {
+                    $x = mt_rand(1, $this->board->getWidth());
+                    $y = mt_rand(1, $this->board->getHeight());
+                    $edge = mt_rand(0, 3);
+                } while(!$this->board->fill($this->botPlayer, $x, $y, $edge, $squaresFilled));
             }
             
             if ($squaresFilled == 0) {

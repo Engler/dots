@@ -39,7 +39,7 @@ $(document).ready(function() {
 
 	$('#board .square').mousemove(function(event) {
 		var square = $(event.currentTarget);
-		var point = { x : event.offsetX, y : event.offsetY };
+		var point = { x : event.offsetX, y : event.offsetY };		
 
 		var row = parseInt(square.data('row'));
 		var column = parseInt(square.data('column'));
