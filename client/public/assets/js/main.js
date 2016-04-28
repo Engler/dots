@@ -5,6 +5,10 @@ $(document).ready(function() {
 
 	SQUARE_SIZE = $('#board .square').eq(0).width();
 
+	$('#board .finished-screen').on('click', function() {
+		window.location.reload();
+	});
+
 	$('#board').click(function() {
 		if (!$(this).hasClass('loading')) {
 			var line = $('.line.hover');
@@ -29,8 +33,6 @@ $(document).ready(function() {
 
 				Server.send(1001, {'x' : x, 'y' : y, 'edge' : edge});
 				line.removeClass('hover');
-
-				//Board.fillEdge(x, y, edge);
 			}
 		}
 
@@ -162,6 +164,8 @@ var Server = new function() {
 				$this.receivePlayerTurn();
             } else if (messageData.type == 2003) {
             	$this.receiveSquareFinished(messageData.params);
+            } else if (messageData.type == 2004) {
+            	$this.receiveGameFinished(messageData.params);
             }
         };
         
@@ -203,5 +207,20 @@ var Server = new function() {
     	pointsElement.text(actualPoints + 1);
 
     	$('#square-' + params.x + '-' + params.y).addClass(params.human ? 'human-player' : 'bot-player');
+    };
+
+    this.receiveGameFinished = function(params) {
+    	var message = '';
+
+    	if (params.winner == 0) {
+    		message = 'O jogo empatou!';
+    	} else if (params.winner > 0) {
+    		message = 'Você GANHOU!';
+    	} else if (params.winner < 0) {
+    		message = 'Você PERDEU!';
+    	}
+
+    	$('#board').addClass('finished');
+    	$('#board .finished-screen .finished-message').html(message);
     };
 }; 

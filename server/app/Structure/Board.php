@@ -2,6 +2,7 @@
 namespace App\Structure;
 
 use App\Structure\Square;
+use App\Event\EventManager;
 
 class Board
 {
@@ -64,6 +65,13 @@ class Board
 						$squaresFilled++;
 					}
 				}
+
+				if ($this->finished()) {
+					EventManager::fire('game.finished', [
+			            'session' => $player->getSession(),
+			            'winner' => $this->getWinner()
+			        ]);
+				}
 				return true;
 			}
 		}
@@ -80,6 +88,98 @@ class Board
 			}
 		}
 		return null;
+	}
+
+	public function getNearestAvailableEdge($x, $y, $edge, $radius = 1)
+	{
+		$search = [];
+
+		if ($edge == Square::TOP || $edge == Square::BOTTOM) {
+			// Pega os quadrados vizinhos da mesma linha
+			for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x + $r, $y); }
+
+			if ($edge == Square::TOP) {
+				// Pega os quadrados vizinhos da linha de cima
+				for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x + $r, $y - $radius); }
+			} else {
+				// Pega os quadrados vizinhos da linha de baixo
+				for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x + $r, $y + $radius); }
+			}
+		} else {
+			// Pega os quadrados vizinhos da mesma coluna
+			for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x, $y + $r); }
+
+			if ($edge == Square::LEFT) {
+				// Pega os quadrados vizinhos da coluna da esquerda
+				for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x - $radius, $y + $r); }
+			} else {
+				// Pega os quadrados vizinhos da coluna da direita
+				for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x + $radius, $y + $r); }
+			}
+		}
+
+		$searchEdges = [];
+
+		// Remove os quadrados nulos (que estão fora das bordas)
+		foreach ($search as $k => $s) {
+		 	if ($s === null) {
+		 		unset($search[$k]);
+		 	} else {
+		 		foreach ($s->getRemainingEdges() as $remainingEdge) {
+		 			$searchEdges[] = ['x' => $s->getX(), 'y' => $s->getY(), 'edge' => $remainingEdge];
+		 		}
+		 	}
+		}
+
+		// Se não encontrar nenhuma aresta disponivel, aumenta o raio de busca
+		if (empty($searchEdges)) {
+			$searchEdges = $this->getNearestAvailableEdge($x, $y, $edge, ++$radius);
+		}
+
+		shuffle($searchEdges);
+
+		return $searchEdges;
+	}
+
+	public function finished()
+	{
+		for ($y = 1; $y <= $this->height; $y++) {
+			for ($x = 1; $x <= $this->width; $x++) {
+				if (!$this->squares[$x][$y]->finished()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	// 1 = Human, 0 = Empate, -1 = BOT
+	public function getWinner()
+	{
+		if (!$this->finished()) {
+			return 0;
+		}
+
+		$humanPoints = 0;
+		$botPoints = 0;
+
+		for ($y = 1; $y <= $this->height; $y++) {
+			for ($x = 1; $x <= $this->width; $x++) {
+				if ($this->squares[$x][$y]->getOwner()->isHuman()) {
+					$humanPoints++;
+				} else {
+					$botPoints++;
+				}
+			}
+		}
+
+		if ($humanPoints > $botPoints) {
+			return 1;
+		} else if ($humanPoints < $botPoints) {
+			return -1;
+		}
+
+		return 0;
 	}
 
 	public function getWidth()

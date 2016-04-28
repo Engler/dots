@@ -11,6 +11,7 @@ class Message
 	const SEND_PONG					= 2001;
 	const SEND_PLAYER_TURN			= 2002;
 	const SEND_SQUARE_FINISHED		= 2003;
+	const SEND_FINISHED 			= 2004;
 	
 	private $type;
 	private $params;

@@ -78,6 +78,11 @@ class Square
 		$this->owner = $owner;
 	}
 
+	public function getOwner()
+	{
+		return $this->owner;
+	}
+
 	public function finished()
 	{
 		return $this->value === 15;
@@ -86,6 +91,25 @@ class Square
 	public function aboutToFinish()
 	{
 		return in_array($this->value, [7, 11, 13, 14]);
+	}
+
+	public function getRemainingEdges()
+	{
+		if ($this->finished()) {
+			return [];
+		}
+
+		$value = $this->value;
+		$remainingEdges = [];
+
+		for ($i = 3; $i >= 0; $i--) {
+			if ($value < self::$edgeValues[$i]) {
+				$value -= self::$edgeValues[$i];
+				$remainingEdges[] = $i;
+			}
+		}
+		
+		return $remainingEdges;
 	}
 
 	public function getRemainingEdge()
@@ -116,6 +140,11 @@ class Square
 	public function getY()
 	{
 		return $this->y;
+	}
+
+	public function equals(Square $square)
+	{
+		return $this->getX() == $square->getX() && $this->getY() == $square->getY();
 	}
 
 	public function __toString()

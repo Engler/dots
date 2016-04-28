@@ -101,6 +101,17 @@ class GameServer implements MessageComponentInterface
 
     public function bootstrapEvents()
     {
+        EventManager::on('game.finished', function($event) {
+            $message = new Message(Message::SEND_FINISHED, [
+                'winner' => $event->winner
+            ]);
+
+            $connection = $event->session->getHumanPlayer()->getConnection();
+            $connection->send((string) $message);
+
+            Logger::message($event->session, '---- Game finished ----');
+        });
+
         EventManager::on('game.squareFinished', function($event) {
             $x = $event->square->getX();
             $y = $event->square->getY();

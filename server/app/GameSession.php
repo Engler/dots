@@ -12,6 +12,8 @@ class GameSession
     protected $board;
     protected $type;
 
+    protected $lastHumanMove = [];
+
     protected $humanPlayer;
     protected $botPlayer;
 
@@ -59,14 +61,20 @@ class GameSession
                 $edge = $square->getRemainingEdge();
                 $this->board->fill($this->botPlayer, $x, $y, $edge, $squaresFilled);
             } else {
+                /*
                 do {
                     $x = mt_rand(1, $this->board->getWidth());
                     $y = mt_rand(1, $this->board->getHeight());
                     $edge = mt_rand(0, 3);
                 } while(!$this->board->fill($this->botPlayer, $x, $y, $edge, $squaresFilled));
+                */
+
+                $squares = $this->board->getNearestAvailableEdge($this->lastHumanMove['x'], $this->lastHumanMove['y'], $this->lastHumanMove['edge']);
+                $s = array_shift($squares);
+                $this->board->fill($this->botPlayer, $s['x'], $s['y'], $s['edge'], $squaresFilled);
             }
             
-            if ($squaresFilled == 0) {
+            if ($this->getBoard()->finished() || $squaresFilled == 0) {
                 $this->changeTurn();
             } else {
                 $this->changeTurn(true);
@@ -78,6 +86,7 @@ class GameSession
     {
         $squaresFilled = 0;
         if ($this->board->fill($this->humanPlayer, $x, $y, $edge, $squaresFilled)) {
+            $this->lastHumanMove = ['x' => $x, 'y' => $y, 'edge' => $edge];
             if ($squaresFilled == 0) {
                 $this->changeTurn();
             }

@@ -6,8 +6,8 @@
 	if ($width < 2) { $width = 2; }
 	if ($height < 2) { $height = 2; }
 
-	$desiredSquareWidth = 50;
-	$maxWidth = 800;
+	$desiredSquareWidth = 80;
+	$maxWidth = 1000;
 	$minWidth = 350;
 
 	$boardWidth = $desiredSquareWidth * $width;
@@ -33,7 +33,7 @@
 		<div id="header">
 			<h1>Jogo dos pontos</h1>
 			<div class="score left">
-				<div class="name">Voce</div>
+				<div class="name">Você</div>
 				<div id="human-points" class="points">0</div>
 			</div>
 			<div class="score right">
@@ -43,6 +43,8 @@
 		</div>
 		<div id="board" class="loading" style="width: <?php echo $boardWidth; ?>px;">
 			<div class="loading-screen"></div>
+			<div class="finished-screen"><div class="finished-message"></div></div>
+
 			<table cellpadding="0" cellspacing="0">
 				<?php
 					for ($row = 1; $row <= $height; $row++) {

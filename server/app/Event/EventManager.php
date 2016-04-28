@@ -4,7 +4,6 @@ namespace App\Event;
 use App\Event\Event;
 
 /*
-	Available events:
 	- socket.open
 	- socket.message
 	- socket.close
@@ -13,6 +12,7 @@ use App\Event\Event;
 	- game.squareFinished
 	- game.squareFillEdge
 	- game.turnChanged
+	- game.finished
 */
 class EventManager
 {
