@@ -58,6 +58,14 @@ class Square
 		return false;
 	}
 
+	public function fillAllEdges($player)
+	{
+		$this->fillEdge($player, self::TOP);
+		$this->fillEdge($player, self::RIGHT);
+		$this->fillEdge($player, self::BOTTOM);	
+		$this->fillEdge($player, self::LEFT);
+	}
+
 	public static function getEdgeValue($edge)
 	{
 		return self::$edgeValues[$edge];

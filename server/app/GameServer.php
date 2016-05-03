@@ -151,7 +151,7 @@ class GameServer implements MessageComponentInterface
                 $message = new Message(Message::SEND_PLAYER_TURN);
                 $connection->send((string) $message);
             }
-            Logger::message($event->session, 'Turn changed: ' . ($event->humanTurn ? 'Human' : 'Bot'));
+            //Logger::message($event->session, 'Turn changed: ' . ($event->humanTurn ? 'Human' : 'Bot'));
         });
     }
 }

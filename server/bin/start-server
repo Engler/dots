@@ -10,19 +10,54 @@ use App\GameServer;
 
 
 
-/*
+
+
+
+
 use App\Structure\Square;
+use App\GameSession;
 use App\Player\BotPlayer;
 
+
+/*
 $player = new BotPlayer();
-$square = new Square(1, 1);
+$session = new GameSession([
+	'width'  => 10,
+	'height' => 10,
+	'humanPlayerConnection' => false
+]);
 
-//$square->fillEdge($player, Square::TOP);
-//$square->fillEdge($player, Square::BOTTOM);
-//$square->fillEdge($player, Square::LEFT);
-$square->fillEdge($player, Square::RIGHT);
+$player = $session->getBotPlayer();
+$board = $session->getBoard();
 
-print_r($square->getRemainingEdges());
+$board->fill($player, 1, 1, Square::TOP, $squaresFilled);
+$board->fill($player, 1, 1, Square::RIGHT, $squaresFilled);
+$board->fill($player, 1, 1, Square::BOTTOM, $squaresFilled);
+$board->fill($player, 1, 1, Square::LEFT, $squaresFilled);
+
+$board->fill($player, 1, 2, Square::TOP, $squaresFilled);
+$board->fill($player, 1, 2, Square::RIGHT, $squaresFilled);
+$board->fill($player, 1, 2, Square::BOTTOM, $squaresFilled);
+$board->fill($player, 1, 2, Square::LEFT, $squaresFilled);
+
+$board->fill($player, 1, 3, Square::TOP, $squaresFilled);
+$board->fill($player, 1, 3, Square::RIGHT, $squaresFilled);
+$board->fill($player, 1, 3, Square::BOTTOM, $squaresFilled);
+$board->fill($player, 1, 3, Square::LEFT, $squaresFilled);
+
+$board->fill($player, 1, 4, Square::TOP, $squaresFilled);
+$board->fill($player, 1, 4, Square::RIGHT, $squaresFilled);
+$board->fill($player, 1, 4, Square::BOTTOM, $squaresFilled);
+$board->fill($player, 1, 4, Square::LEFT, $squaresFilled);
+
+
+
+for ($i = 1; $i <= 5; $i++) {
+
+	$squares = $board->getNearestAvailableEdge(1, 1, Square::TOP, $i);
+	echo $board->highlightSquares($squares);
+	echo "\n\n==================================================\n\n";
+}
 
 exit;
 */
@@ -67,7 +102,7 @@ $server = IoServer::factory(
             new GameServer()
         )
     ),
-    8080
+    9999
 );
 
 $server->run();

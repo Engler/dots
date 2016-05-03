@@ -94,35 +94,66 @@ class Board
 	{
 		$search = [];
 
-		if ($edge == Square::TOP || $edge == Square::BOTTOM) {
-			// Pega os quadrados vizinhos da mesma linha
-			for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $r, $y); }
+		if ($radius == 1) {
+			if ($edge == Square::TOP || $edge == Square::BOTTOM) {
+				// Pega os quadrados vizinhos da mesma linha
+				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $r, $y); }
 
-			if ($edge == Square::TOP) {
-				// Pega os quadrados vizinhos da linha de cima
-				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $r, $y - $radius); }
+				if ($edge == Square::TOP) {
+					// Pega os quadrados vizinhos da linha de cima
+					for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $r, $y - $radius); }
+				} else {
+					// Pega os quadrados vizinhos da linha de baixo
+					for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $r, $y + $radius); }
+				}
 			} else {
-				// Pega os quadrados vizinhos da linha de baixo
-				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $r, $y + $radius); }
+				// Pega os quadrados vizinhos da mesma coluna
+				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x, $y + $r); }
+
+				if ($edge == Square::LEFT) {
+					// Pega os quadrados vizinhos da coluna da esquerda
+					for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x - $radius, $y + $r); }
+				} else {
+					// Pega os quadrados vizinhos da coluna da direita
+					for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $radius, $y + $r); }
+				}
 			}
 		} else {
-			// Pega os quadrados vizinhos da mesma coluna
-			for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x, $y + $r); }
+			// Usar esses offsets depois
+			$offsetStartX = $offsetEndX = $offsetStartY = $offsetEndY = 0;
 
-			if ($edge == Square::LEFT) {
-				// Pega os quadrados vizinhos da coluna da esquerda
-				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x - $radius, $y + $r); }
-			} else {
-				// Pega os quadrados vizinhos da coluna da direita
-				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $radius, $y + $r); }
+			switch ($edge) {
+				case Square::LEFT:
+					$offsetEndX = -1;
+					break;
+				case Square::RIGHT:
+					$offsetStartX = 1;
+					break;
+				case Square::TOP:
+					$offsetEndY = -1;
+					break;
+				case Square::BOTTOM:
+					$offsetStartY = 1;
+					break;
 			}
+
+			// Pega a linha de quadrados TOP
+			for ($r = -$radius + $offsetStartX; $r <= $radius + $offsetEndX; $r += 1) { $search[] = $this->getSquare($x + $r, $y - $radius + $offsetStartY); }
+
+			// Pega a linha de quadrados BOTTOM
+			for ($r = -$radius + $offsetStartX; $r <= $radius + $offsetEndX; $r += 1) { $search[] = $this->getSquare($x + $r, $y + $radius + $offsetEndY); }
+
+			// Pega a linha de quadrados LEFT
+			for ($r = -$radius + $offsetStartY; $r <= $radius + $offsetEndY; $r += 1) { $search[] = $this->getSquare($x - $radius + $offsetStartX, $y + $r); }
+
+			// Pega a linha de quadrados RIGHT
+			for ($r = -$radius + $offsetStartY; $r <= $radius + $offsetEndY; $r += 1) { $search[] = $this->getSquare($x + $radius + $offsetEndX, $y + $r); }
 		}
 
 		$searchEdges = [];
 
 		// Remove os quadrados nulos (que estão fora das bordas)
 		foreach ($search as $k => $s) {
-
 		 	if ($s === null) {
 		 		unset($search[$k]);
 		 	} else {
@@ -137,7 +168,7 @@ class Board
 			$searchEdges = $this->getNearestAvailableEdge($x, $y, $edge, ++$radius);
 		}
 
-		shuffle($searchEdges);
+		//shuffle($searchEdges);
 
 		return $searchEdges;
 	}
@@ -191,6 +222,25 @@ class Board
 	public function getHeight()
 	{
 		return $this->height;
+	}
+
+	public function highlightSquares($squares)
+	{
+		$string = '';
+		for ($y = 1; $y <= $this->height; $y++) {
+			for ($x = 1; $x <= $this->width; $x++) {
+				$exist = false;
+				foreach ($squares as $square) {
+					if ($square['x'] == $x && $square['y'] == $y) {
+						$exist = true;
+						break;
+					}
+				}
+				$string .= '[' . ($exist ? 'x' : ' ') . ']';
+			}
+			$string .= "\n";
+		}
+		return $string;
 	}
 
 	public function __toString()

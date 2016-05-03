@@ -147,10 +147,9 @@ var Server = new function() {
             return false;
         }
         
-        this.socket = new WebSocket("ws://localhost:8080/");
+        this.socket = new WebSocket("ws://localhost:9999/");
         
         this.socket.onopen = function() {
-            console.log('socket opened');
             $this.send(1000, {'width' : BOARD_WIDTH, 'height' : BOARD_HEIGHT});
 
             // Ping
@@ -160,7 +159,7 @@ var Server = new function() {
         };
         
         this.socket.onclose = function(event) {
-            console.log('socket closed');
+        	
         };
         this.socket.onerror = function (error) {
             console.log(error);
@@ -204,15 +203,24 @@ var Server = new function() {
     	$('#board').removeClass('loading');
 
     	if (AUTO) {
-    		var randomX = 1 + Math.floor(Math.random() * (BOARD_WIDTH));
-			var randomY = 1 + Math.floor(Math.random() * (BOARD_HEIGHT));
-			var randomEdge = Math.floor(Math.random() * 4);
 
-			setTimeout(function() {
-				if (AUTO) {
-					Server.send(1001, {'x' : randomX, 'y' : randomY, 'edge' : randomEdge});
-				}
-			}, 200);
+    		var availables = $('#board .square:not(.bot-player, .human-player)');
+
+    		if (availables.length > 0) {
+	    		var random = Math.floor(Math.random() * (availables.length));
+				var randomEdge = Math.floor(Math.random() * 4);
+
+				var element = availables.eq(random);
+
+				var x = element.data('column');
+				var y = element.data('row');
+
+				setTimeout(function() {
+					if (AUTO) {
+						Server.send(1001, {'x' : x, 'y' : y, 'edge' : randomEdge});
+					}
+				}, 50);
+    		}
     	}
     };
 
