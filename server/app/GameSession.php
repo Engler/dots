@@ -71,7 +71,7 @@ class GameSession
 
                 $squares = $this->board->getNearestAvailableEdge($this->lastHumanMove['x'], $this->lastHumanMove['y'], $this->lastHumanMove['edge']);
                 $s = array_shift($squares);
-                $this->board->fill($this->botPlayer, $s['x'], $s['y'], $s['edge'], $squaresFilled);
+                var_dump($this->board->fill($this->botPlayer, $s['x'], $s['y'], $s['edge'], $squaresFilled));
             }
             
             if ($this->getBoard()->finished() || $squaresFilled == 0) {

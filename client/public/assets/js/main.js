@@ -1,9 +1,17 @@
 var SQUARE_SIZE = 0;
+var AUTO = true;
+
 $(document).ready(function() {
 
 	Server.initialize();
 
 	SQUARE_SIZE = $('#board .square').eq(0).width();
+
+	$(window).on('keyup', function(event) {
+		if (event.keyCode == 65 && event.altKey) {
+			AUTO = !AUTO;
+		}
+	});
 
 	$('#board .finished-screen').on('click', function() {
 		window.location.reload();
@@ -70,6 +78,7 @@ $(document).ready(function() {
 		}
 
 	});
+
 });
 
 function pointInTriangle(point, v1, v2, v3) {
@@ -193,6 +202,18 @@ var Server = new function() {
 
     this.receivePlayerTurn = function() {
     	$('#board').removeClass('loading');
+
+    	if (AUTO) {
+    		var randomX = 1 + Math.floor(Math.random() * (BOARD_WIDTH));
+			var randomY = 1 + Math.floor(Math.random() * (BOARD_HEIGHT));
+			var randomEdge = Math.floor(Math.random() * 4);
+
+			setTimeout(function() {
+				if (AUTO) {
+					Server.send(1001, {'x' : randomX, 'y' : randomY, 'edge' : randomEdge});
+				}
+			}, 200);
+    	}
     };
 
     this.receiveSquareFinished = function(params) {
@@ -222,5 +243,11 @@ var Server = new function() {
 
     	$('#board').addClass('finished');
     	$('#board .finished-screen .finished-message').html(message);
+
+    	if (AUTO) {
+	    	setTimeout(function() {
+	    		window.location.reload();
+	    	}, 500);
+    	}
     };
 }; 

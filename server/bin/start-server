@@ -8,6 +8,25 @@ use Ratchet\WebSocket\WsServer;
 
 use App\GameServer;
 
+
+
+/*
+use App\Structure\Square;
+use App\Player\BotPlayer;
+
+$player = new BotPlayer();
+$square = new Square(1, 1);
+
+//$square->fillEdge($player, Square::TOP);
+//$square->fillEdge($player, Square::BOTTOM);
+//$square->fillEdge($player, Square::LEFT);
+$square->fillEdge($player, Square::RIGHT);
+
+print_r($square->getRemainingEdges());
+
+exit;
+*/
+
 /*
 use App\Event\EventManager;
 EventManager::on('socket.connect', function($event) {

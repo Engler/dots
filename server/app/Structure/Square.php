@@ -104,8 +104,9 @@ class Square
 
 		for ($i = 3; $i >= 0; $i--) {
 			if ($value < self::$edgeValues[$i]) {
-				$value -= self::$edgeValues[$i];
 				$remainingEdges[] = $i;
+			} else {
+				$value -= self::$edgeValues[$i];
 			}
 		}
 		
@@ -149,6 +150,6 @@ class Square
 
 	public function __toString()
 	{
-		return '[' . str_pad($this->value, 3, ' ', STR_PAD_BOTH) . ']';
+		return '[' . $this->x . ',' . $this->y . ' = ' . str_pad($this->value, 3, ' ', STR_PAD_BOTH) . ']';
 	}
 }

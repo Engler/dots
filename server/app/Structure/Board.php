@@ -29,7 +29,7 @@ class Board
 		if ($x < 1 || $y < 1 || $x > $this->width || $y > $this->height) {
 			return null;
 		}
-		
+
 		return $this->squares[$x][$y];
 	}
 
@@ -96,25 +96,25 @@ class Board
 
 		if ($edge == Square::TOP || $edge == Square::BOTTOM) {
 			// Pega os quadrados vizinhos da mesma linha
-			for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x + $r, $y); }
+			for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $r, $y); }
 
 			if ($edge == Square::TOP) {
 				// Pega os quadrados vizinhos da linha de cima
-				for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x + $r, $y - $radius); }
+				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $r, $y - $radius); }
 			} else {
 				// Pega os quadrados vizinhos da linha de baixo
-				for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x + $r, $y + $radius); }
+				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $r, $y + $radius); }
 			}
 		} else {
 			// Pega os quadrados vizinhos da mesma coluna
-			for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x, $y + $r); }
+			for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x, $y + $r); }
 
 			if ($edge == Square::LEFT) {
 				// Pega os quadrados vizinhos da coluna da esquerda
-				for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x - $radius, $y + $r); }
+				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x - $radius, $y + $r); }
 			} else {
 				// Pega os quadrados vizinhos da coluna da direita
-				for ($r = -$radius; $r <= $radius; $r += $radius) { $search[] = $this->getSquare($x + $radius, $y + $r); }
+				for ($r = -$radius; $r <= $radius; $r += 1) { $search[] = $this->getSquare($x + $radius, $y + $r); }
 			}
 		}
 
@@ -122,6 +122,7 @@ class Board
 
 		// Remove os quadrados nulos (que estão fora das bordas)
 		foreach ($search as $k => $s) {
+
 		 	if ($s === null) {
 		 		unset($search[$k]);
 		 	} else {
