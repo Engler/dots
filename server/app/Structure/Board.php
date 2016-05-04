@@ -93,6 +93,13 @@ class Board
 		return null;
 	}
 
+	/*
+	 * Busca por uma aresta próxima a ultima jogada do player humano que não
+	 * deixe um quadrado pronto para o player humano fazer, caso não encontre
+	 * nenhuma aresta, retorna a aresta que vai conceder a menor quantidade de
+	 * pontos ao outro jogador. Caso mais de uma aresta esteja disponível, sorteia
+	 * aleatoriamente.
+	 */
 	public function getNearestAvailableEdge($player, $x, $y, $edge, $radius = 1, $conflictSquares = [])
 	{
 		$search = [];
