@@ -1,5 +1,5 @@
 var SQUARE_SIZE = 0;
-var AUTO = true;
+var AUTO = false;
 
 $(document).ready(function() {
 

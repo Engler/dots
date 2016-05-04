@@ -12,14 +12,12 @@ use App\GameServer;
 
 
 
-
-
+/*
 use App\Structure\Square;
+use App\Structure\Board;
 use App\GameSession;
 use App\Player\BotPlayer;
 
-
-/*
 $player = new BotPlayer();
 $session = new GameSession([
 	'width'  => 10,
@@ -31,9 +29,19 @@ $player = $session->getBotPlayer();
 $board = $session->getBoard();
 
 $board->fill($player, 1, 1, Square::TOP, $squaresFilled);
-$board->fill($player, 1, 1, Square::RIGHT, $squaresFilled);
 $board->fill($player, 1, 1, Square::BOTTOM, $squaresFilled);
+#$board->fill($player, 1, 1, Square::LEFT, $squaresFilled);
+#$board->fill($player, 1, 1, Square::RIGHT, $squaresFilled);
+
+$board->getNearestAvailableEdge($player, 1, 1, Square::LEFT);
+
+exit;
+*/
+/*
+$board->fill($player, 1, 1, Square::RIGHT, $squaresFilled);
 $board->fill($player, 1, 1, Square::LEFT, $squaresFilled);
+$board->fill($player, 1, 1, Square::TOP, $squaresFilled);
+$board->fill($player, 1, 1, Square::BOTTOM, $squaresFilled);
 
 $board->fill($player, 1, 2, Square::TOP, $squaresFilled);
 $board->fill($player, 1, 2, Square::RIGHT, $squaresFilled);
@@ -49,18 +57,8 @@ $board->fill($player, 1, 4, Square::TOP, $squaresFilled);
 $board->fill($player, 1, 4, Square::RIGHT, $squaresFilled);
 $board->fill($player, 1, 4, Square::BOTTOM, $squaresFilled);
 $board->fill($player, 1, 4, Square::LEFT, $squaresFilled);
-
-
-
-for ($i = 1; $i <= 5; $i++) {
-
-	$squares = $board->getNearestAvailableEdge(1, 1, Square::TOP, $i);
-	echo $board->highlightSquares($squares);
-	echo "\n\n==================================================\n\n";
-}
-
-exit;
 */
+
 
 /*
 use App\Event\EventManager;

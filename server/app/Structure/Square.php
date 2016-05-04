@@ -71,6 +71,26 @@ class Square
 		return self::$edgeValues[$edge];
 	}
 
+	public static function getEdgeName($edge)
+	{
+		switch ($edge) {
+			case self::LEFT:
+				return 'LEFT';
+				break;
+			case self::BOTTOM:
+				return 'BOTTOM';
+				break;
+			case self::RIGHT:
+				return 'RIGHT';
+				break;
+			case self::TOP:
+				return 'TOP';
+				break;
+		}
+
+		return null;
+	}
+
 	public static function getOppositeEdge($edge)
 	{	
 		switch ($edge) {

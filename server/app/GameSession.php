@@ -69,9 +69,28 @@ class GameSession
                 } while(!$this->board->fill($this->botPlayer, $x, $y, $edge, $squaresFilled));
                 */
 
-                $squares = $this->board->getNearestAvailableEdge($this->lastHumanMove['x'], $this->lastHumanMove['y'], $this->lastHumanMove['edge']);
+                $squares = $this->board->getNearestAvailableEdge($this->botPlayer, $this->lastHumanMove['x'], $this->lastHumanMove['y'], $this->lastHumanMove['edge']);
                 $s = array_shift($squares);
                 
+                /*
+                $conflictSquares = [];
+                $okSquares = [];
+
+                foreach ($squares as $s) {
+                    if ($this->board->willLeftAnySquareAboutToFinish($this->botPlayer, $s['x'], $s['y'], $s['edge'])) {
+                        $conflictSquares[] = $s;
+                    } else {
+                        $okSquares[] = $s;
+                    }
+                }
+
+                if (!empty($okSquares)) {
+                    $s = array_shift($okSquares);
+                } else {
+                    $s = array_shift($conflictSquares);
+                }
+                */
+
                 $this->board->fill($this->botPlayer, $s['x'], $s['y'], $s['edge'], $squaresFilled);
             }
             

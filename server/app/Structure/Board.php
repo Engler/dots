@@ -3,6 +3,7 @@ namespace App\Structure;
 
 use App\Structure\Square;
 use App\Event\EventManager;
+use App\Logger;
 
 class Board
 {
@@ -11,11 +12,13 @@ class Board
 	protected $width;
 	protected $height;
 	protected $squares;
+	protected $tempSquares;
 
 	public function __construct($width, $height)
 	{
 		$this->width = $width;
 		$this->height = $height;
+		$this->tempSquares = false;
 
 		for ($y = 1; $y <= $height; $y++) {
 			for ($x = 1; $x <= $width; $x++) {
@@ -36,8 +39,8 @@ class Board
 	public function fill($player, $x, $y, $edge, &$squaresFilled)
 	{
 		$squaresFilled = 0;
-
 		$square = $this->getSquare($x, $y);
+
 		if ($square) {
 			$move = $square->fillEdge($player, $edge);
 			if ($move) {
@@ -66,7 +69,7 @@ class Board
 					}
 				}
 
-				if ($this->finished()) {
+				if ($this->finished() && !$this->tempSquares) {
 					EventManager::fire('game.finished', [
 			            'session' => $player->getSession(),
 			            'winner' => $this->getWinner()
@@ -90,7 +93,7 @@ class Board
 		return null;
 	}
 
-	public function getNearestAvailableEdge($x, $y, $edge, $radius = 1)
+	public function getNearestAvailableEdge($player, $x, $y, $edge, $radius = 1, $conflictSquares = [])
 	{
 		$search = [];
 
@@ -158,19 +161,88 @@ class Board
 		 		unset($search[$k]);
 		 	} else {
 		 		foreach ($s->getRemainingEdges() as $remainingEdge) {
-		 			$searchEdges[] = ['x' => $s->getX(), 'y' => $s->getY(), 'edge' => $remainingEdge];
+		 			$newItem = ['x' => $s->getX(), 'y' => $s->getY(), 'edge' => $remainingEdge];
+
+		 			$checkResult = $this->willLeftAnySquareAboutToFinish($player, $s->getX(), $s->getY(), $remainingEdge);
+
+		 			if ($checkResult === false) {
+		 				$searchEdges[] = $newItem;
+		 			} else {
+		 				$conflictSquares[] = [
+		 					'points' => $checkResult,
+		 					'item' => $newItem
+						];
+		 			}
 		 		}
 		 	}
 		}
 
-		// Se não encontrar nenhuma aresta disponivel, aumenta o raio de busca
+		Logger::message($player->getSession(), '[NEAREST] Found ' . count($searchEdges) . ' possible clean nearest edge(s) at radius: ' . $radius . ' of ['.$x.','.$y.','.Square::getEdgeName($edge).']');
+
+		// Se não encontrar nenhuma aresta disponivel...
 		if (empty($searchEdges)) {
-			$searchEdges = $this->getNearestAvailableEdge($x, $y, $edge, ++$radius);
+			// Se o raio de busca ultrapassar os limites do tabuleiro, comeca a considerar as opcoes que geram perda de pontos
+			if ($radius > $this->width && $radius > $this->height) {
+				Logger::message($player->getSession(), '[CONFLICT] Not found any clean edge to play');
+				$min = null;
+				foreach ($conflictSquares as $conflictSquare) {
+					// Mantém apenas as opcões que geram a menor perda de pontos
+					if ($min === null || $conflictSquare['points'] < $min) {
+						$min = $conflictSquare['points'];
+						$searchEdges = [$conflictSquare['item']];
+					}
+					// Se existir mais de uma opcão que acaba com a mesma perda de pontos, será escolhida aleatóriamente
+					else if ($conflictSquare['points'] == $min) {
+						$searchEdges[] = $conflictSquare['item'];
+					}
+				}
+
+				Logger::message($player->getSession(), '[CONFLICT] Found ' . count($searchEdges) . ' possible edge(s) that can make you lose ' . $min . ' point(s)');
+			} else {
+				// Aumenta o raio de busca
+				$searchEdges = $this->getNearestAvailableEdge($player, $x, $y, $edge, ++$radius, $conflictSquares);
+			}
 		}
 
-		//shuffle($searchEdges);
+		// Embaralha as opcões encontradas
+		shuffle($searchEdges);
 
 		return $searchEdges;
+	}
+
+	public function willLeftAnySquareAboutToFinish($player, $desiredX, $desiredY, $edge)
+	{
+		$tempSquares = [];
+		for ($y = 1; $y <= $this->height; $y++) {
+			for ($x = 1; $x <= $this->width; $x++) {
+				$tempSquares[$x][$y] = clone $this->squares[$x][$y];
+			}
+		}
+
+		$originalSquares = $this->squares;
+		$this->squares = $tempSquares;
+		$this->tempSquares = true;
+
+		$this->fill($player, $desiredX, $desiredY, $edge, $squaresFilled);
+
+		$aboutToFinish = $this->getSquareAboutToFinish();
+
+		$result = false;
+
+		if ($aboutToFinish) {
+			$result = 0;
+			do {
+				$result++;
+				// Preenche o $aboutToFinish
+				$this->fill($player, $aboutToFinish->getX(), $aboutToFinish->getY(), $aboutToFinish->getRemainingEdge(), $squaresFilled);
+				$aboutToFinish = $this->getSquareAboutToFinish();
+			} while ($aboutToFinish && $squaresFilled > 0);
+		}
+
+		$this->squares = $originalSquares;
+		$this->tempSquares = false;
+
+		return $result;
 	}
 
 	public function finished()
@@ -222,6 +294,11 @@ class Board
 	public function getHeight()
 	{
 		return $this->height;
+	}
+
+	public function isTempSquares()
+	{
+		return $this->tempSquares;
 	}
 
 	public function highlightSquares($squares)
