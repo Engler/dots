@@ -27,6 +27,7 @@
 		<script>
 		var BOARD_WIDTH = <?php echo $width; ?>;
 		var BOARD_HEIGHT = <?php echo $height; ?>;
+		var SERVER_NAME = '<?php echo $_SERVER['SERVER_NAME']; ?>';
 		</script>
 	</head>
 	<body>
