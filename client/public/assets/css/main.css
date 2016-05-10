@@ -1,0 +1,150 @@
+body {
+	background: #F0F0F0;
+	color: #666;
+	font-family: Arial;
+	text-align: center;
+}
+#header {
+	position: relative;
+	padding: 0 50px;
+	width: 325px;
+	margin: 30px auto;
+}
+#header h1 {
+	color: #666;
+	font-size: 30px;
+	margin: 0;
+}
+#header .score {
+	position: absolute;
+	top: 0;
+}
+#header .score.left {
+	left: 0;
+}
+#header .score.right {
+	right: 0;
+}
+#header .score .name {
+	font-weight: bold;
+}
+#header .score .points {
+	font-size: 25px;
+}
+#board {
+	width: 800px;
+	position: relative;
+	background: #FFF;
+	margin: 0 auto;
+	cursor: pointer;
+	padding: 17px 15px;
+	border: 1px solid #BBB;
+	box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.15);
+}
+#board .loading-screen {
+	background: rgba(255,255,255,0.3);
+	display: none;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 30;
+	cursor: wait;
+}
+#board.loading .loading-screen {
+	display: block;
+}
+#board .finished-screen {
+	background: rgba(0,0,0,0.8);
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	display: none;
+	left: 0;
+	right: 0;
+	z-index: 35;
+	color: #FFF;
+	cursor: pointer;
+}
+#board .finished-screen .finished-message {
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	font-size: 30px;
+	height: 32px;
+	line-height: 32px;
+	margin-top: -16px;
+}
+#board.finished .finished-screen {
+	display: block;
+}
+#board table {
+	width: 100%;
+}
+#board table tr td {
+	position: relative;
+}
+#board table tr td .line {
+	z-index: 10;
+	position: absolute;
+	background-color: #FFF;
+	transition: all 0.2s ease;
+}
+#board table tr td .line.hover {
+	background-color: #AAA;
+}
+#board table tr td .line.filled {
+	background-color: #666 !important;
+}
+
+#board table tr td .line.top-line { top: -4px; left: 0; right: 0; }
+#board table tr td .line.bottom-line { bottom: -4px; left: 0; right: 0; }
+#board table tr td .line.left-line { left: -4px; top: 0; bottom: 0; }
+#board table tr td .line.right-line { right: -4px; top: 0; bottom: 0; }
+#board table tr td .line.top-line,
+#board table tr td .line.bottom-line {
+	height: 5px;
+}
+#board table tr td .line.left-line,
+#board table tr td .line.right-line {
+	width: 5px;
+}
+
+#board table tr td .dot {
+	z-index: 11;
+	background: #AAA;
+	position: absolute;
+	width: 7px;
+	height: 7px;
+	border-radius: 5px;
+}
+#board table tr td .dot.dot-top-left { top: -5px; left: -5px; }
+#board table tr td .dot.dot-top-right { top: -5px; right: -5px; }
+#board table tr td .dot.dot-bottom-left { bottom: -5px; left: -5px; }
+#board table tr td .dot.dot-bottom-right { bottom: -5px; right: -5px; }
+
+.square {
+	position: relative;
+}
+.square.human-player {
+	background: #DCF361;
+}
+.square.bot-player {
+	background: #A0D1FB;
+}
+.square:before {
+	display: block;
+	content: "";
+	width: 100%;
+	padding-top: 100%;
+}
+.square > .square-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
