@@ -3,17 +3,6 @@ namespace App\Event;
 
 use App\Event\Event;
 
-/*
-	- socket.open
-	- socket.message
-	- socket.close
-	- socket.error
-
-	- game.squareFinished
-	- game.squareFillEdge
-	- game.turnChanged
-	- game.finished
-*/
 class EventManager
 {
 	private static $listeners;

@@ -1,5 +1,5 @@
 var SQUARE_SIZE = 0;
-var AUTO = false;
+var AUTO = true;
 
 $(document).ready(function() {
 
@@ -147,7 +147,7 @@ var Server = new function() {
             return false;
         }
         
-        this.socket = new WebSocket("ws://localhost:9999/");
+        this.socket = new WebSocket("ws://192.168.25.6:9999/");
         
         this.socket.onopen = function() {
             $this.send(1000, {'width' : BOARD_WIDTH, 'height' : BOARD_HEIGHT});

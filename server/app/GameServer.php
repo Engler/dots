@@ -12,7 +12,6 @@ use App\Structure\Square;
 
 class GameServer implements MessageComponentInterface
 {
-
 	protected $connections;
 	protected $sessions;
 
