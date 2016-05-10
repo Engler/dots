@@ -32,7 +32,12 @@
 	</head>
 	<body>
 		<div id="header">
-			<h1>Jogo dos pontos</h1>
+			<h1>
+				Jogo dos pontos
+			</h1>
+			<!--
+			<img class="logo" src="assets/images/logo-unisociesc.png" />
+-->
 			<div class="score left">
 				<div class="name">Você</div>
 				<div id="human-points" class="points">0</div>
@@ -72,6 +77,9 @@
 					}
 				?>
 			</table>
+		</div>
+		<div id="footer">
+			Desenvolvido por Guilherme Engler Stadelhofer e Elton Henrique Faust
 		</div>
 	</body>
 </html>
