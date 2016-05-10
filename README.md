@@ -2,6 +2,8 @@
 Este jogo foi desenvolvido para a matéria de Inteligência Artificial do curso de Engenharia da Computação da UNISOCIESC.
 A lógica é processada em um servidor desenvolvido em PHP, a interface foi desenvolvida utilizando HTML/JS/CSS e a comunicação é feita através de WebSockets.
 
+![Alt text](/client/public/assets/images/screenshot.png?raw=true "Optional Title")
+
 ## Autores
 * Guilherme Engler Stadelhofer ([@Engler](http://github.com/Engler))
 * Elton Henrique Faust ([@EltonFaust](http://github.com/EltonFaust))
@@ -32,5 +34,3 @@ php -S localhost:8000
 ```
 
 Ao acessar [http://localhost:8000](http://localhost:8000) o jogo estará disponível.
-
-## Estratégia da IA
