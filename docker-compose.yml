@@ -1,0 +1,13 @@
+dot-server:
+  build: server
+  ports:
+   - "5555:80"
+  volumes:
+   - ./server:/code
+
+dot-client:
+  build: client
+  ports:
+   - "5556:80"
+  volumes:
+   - ./client:/var/www/html

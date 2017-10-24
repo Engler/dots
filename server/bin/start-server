@@ -14,7 +14,7 @@ $server = IoServer::factory(
             new GameServer()
         )
     ),
-    9999
+    80
 );
 
 $server->run();
