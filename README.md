@@ -23,16 +23,9 @@ cd dots-game/server
 composer install
 ```
 
-Iniciar o servidor
+Iniciar o servidor/cliente
 ```
-cd dots-game/server/bin
-php start-server
-```
-
-Para acessar o jogo, basta servir a pasta **client/public**
-```
-cd dots-game/client/public
-php -S localhost:8000
+docker-composer up
 ```
 
-Ao acessar [http://localhost:8000](http://localhost:8000) o jogo estará disponível.
+Ao acessar [http://localhost:5556](http://localhost:5556) o jogo estará disponível.
