@@ -27,6 +27,7 @@
 		<script>
 		var BOARD_WIDTH = <?php echo $width; ?>;
 		var BOARD_HEIGHT = <?php echo $height; ?>;
+		var SERVER_NAME = '<?php echo $_SERVER['SERVER_NAME']; ?>';
 		</script>
 	</head>
 	<body>
@@ -71,6 +72,9 @@
 					}
 				?>
 			</table>
+		</div>
+		<div id="footer">
+			Desenvolvido por Guilherme Engler Stadelhofer e Elton Henrique Faust
 		</div>
 	</body>
 </html>

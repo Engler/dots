@@ -1,5 +1,7 @@
 body {
 	background: #F0F0F0;
+	background: url('../images/logo-unisociesc.png') 10px 10px no-repeat;
+	background-size: 80px;
 	color: #666;
 	font-family: Arial;
 	text-align: center;
@@ -30,6 +32,11 @@ body {
 }
 #header .score .points {
 	font-size: 25px;
+}
+#footer {
+	color: #999;
+	padding-top: 15px;
+	font-size: 13px;
 }
 #board {
 	width: 800px;
@@ -130,7 +137,7 @@ body {
 	position: relative;
 }
 .square.human-player {
-	background: #DCF361;
+	background: #609CEF;
 }
 .square.bot-player {
 	background: #EA6F72;
